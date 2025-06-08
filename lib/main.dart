@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'screens/home_screen.dart';
+import 'screens/splash_screen.dart';
 
 void main() {
   runApp(CeritaRakyatApp());
@@ -15,7 +15,7 @@ class CeritaRakyatApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
         fontFamily: 'Roboto',
       ),
-      home: HomeScreen(),
+      home: SplashScreen(), // Changed from HomeScreen() to SplashScreen()
       debugShowCheckedModeBanner: false,
     );
   }

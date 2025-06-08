@@ -5,15 +5,30 @@ import '../models/story_model.dart';
 import '../widgets/common/header_widget.dart';
 import '../widgets/story/category_filter_widget.dart';
 import '../widgets/story/story_card_widget.dart';
-import 'story_detail_screen.dart'; // Ensure StoryDetailScreen is correctly imported.
+import 'story_detail_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen>
+    with TickerProviderStateMixin {
   String selectedCategory = 'Semua';
+  bool showMenu = false;
+
+  // Animation Controllers
+  late AnimationController _headerAnimationController;
+  late AnimationController _contentAnimationController;
+  late AnimationController _fabAnimationController;
+
+  // Animations
+  late Animation<Offset> _headerSlideAnimation;
+  late Animation<double> _headerFadeAnimation;
+  late Animation<double> _contentFadeAnimation;
+  late Animation<Offset> _contentSlideAnimation;
+  late Animation<double> _fabScaleAnimation;
+
   List<Story> stories = [
     Story(
       id: '1',
@@ -66,9 +81,92 @@ class _HomeScreenState extends State<HomeScreen> {
     return stories.where((story) => story.category == selectedCategory).toList();
   }
 
-  bool showMenu = false; // Toggle for the menu (Quiz and Add New Story)
+  @override
+  void initState() {
+    super.initState();
 
-  // Method untuk menambahkan cerita baru
+    // Initialize animation controllers
+    _headerAnimationController = AnimationController(
+      duration: Duration(milliseconds: 800),
+      vsync: this,
+    );
+
+    _contentAnimationController = AnimationController(
+      duration: Duration(milliseconds: 1000),
+      vsync: this,
+    );
+
+    _fabAnimationController = AnimationController(
+      duration: Duration(milliseconds: 600),
+      vsync: this,
+    );
+
+    // Initialize animations
+    _headerSlideAnimation = Tween<Offset>(
+      begin: Offset(0, -1),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: _headerAnimationController,
+      curve: Curves.easeOutBack,
+    ));
+
+    _headerFadeAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: _headerAnimationController,
+      curve: Curves.easeOut,
+    ));
+
+    _contentFadeAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: _contentAnimationController,
+      curve: Curves.easeOut,
+    ));
+
+    _contentSlideAnimation = Tween<Offset>(
+      begin: Offset(0, 0.3),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: _contentAnimationController,
+      curve: Curves.easeOutCubic,
+    ));
+
+    _fabScaleAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: _fabAnimationController,
+      curve: Curves.elasticOut,
+    ));
+
+    // Start animations with delays
+    _startAnimations();
+  }
+
+  void _startAnimations() async {
+    // Start header animation immediately
+    _headerAnimationController.forward();
+
+    // Start content animation after short delay
+    await Future.delayed(Duration(milliseconds: 300));
+    _contentAnimationController.forward();
+
+    // Start FAB animation after content
+    await Future.delayed(Duration(milliseconds: 500));
+    _fabAnimationController.forward();
+  }
+
+  @override
+  void dispose() {
+    _headerAnimationController.dispose();
+    _contentAnimationController.dispose();
+    _fabAnimationController.dispose();
+    super.dispose();
+  }
+
   void _addNewStory(Story newStory) {
     setState(() {
       stories.add(newStory);
@@ -78,139 +176,260 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Cerita Rakyat Nusantara"),
-        backgroundColor: Colors.brown[700],
-        foregroundColor: Colors.white, // This makes the text white
-        elevation: 0, // Remove shadow
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(kToolbarHeight),
+        child: SlideTransition(
+          position: _headerSlideAnimation,
+          child: FadeTransition(
+            opacity: _headerFadeAnimation,
+            child: AppBar(
+              title: Text("Cerita Rakyat Nusantara"),
+              backgroundColor: Colors.brown[700],
+              foregroundColor: Colors.white,
+              elevation: 0,
+            ),
+          ),
+        ),
       ),
       body: SafeArea(
         child: Column(
           children: [
-            HeaderWidget(),
-            CategoryFilterWidget(
-              selectedCategory: selectedCategory,
-              onCategoryChanged: (category) {
-                setState(() {
-                  selectedCategory = category;
-                });
-              },
+            // Animated Header Widget
+            SlideTransition(
+              position: _headerSlideAnimation,
+              child: FadeTransition(
+                opacity: _headerFadeAnimation,
+                child: HeaderWidget(),
+              ),
             ),
+
+            // Animated Category Filter
+            SlideTransition(
+              position: _contentSlideAnimation,
+              child: FadeTransition(
+                opacity: _contentFadeAnimation,
+                child: CategoryFilterWidget(
+                  selectedCategory: selectedCategory,
+                  onCategoryChanged: (category) {
+                    setState(() {
+                      selectedCategory = category;
+                    });
+                  },
+                ),
+              ),
+            ),
+
+            // Animated Story List
             Expanded(
-              child: ListView.builder(
-                padding: EdgeInsets.all(16),
-                itemCount: filteredStories.length,
-                itemBuilder: (context, index) {
-                  return StoryCardWidget(
-                    story: filteredStories[index],
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => StoryDetailScreen(
-                            story: filteredStories[index],
+              child: SlideTransition(
+                position: _contentSlideAnimation,
+                child: FadeTransition(
+                  opacity: _contentFadeAnimation,
+                  child: AnimatedList(
+                    padding: EdgeInsets.all(16),
+                    initialItemCount: filteredStories.length,
+                    itemBuilder: (context, index, animation) {
+                      if (index >= filteredStories.length) return SizedBox.shrink();
+
+                      return SlideTransition(
+                        position: Tween<Offset>(
+                          begin: Offset(1, 0),
+                          end: Offset.zero,
+                        ).animate(CurvedAnimation(
+                          parent: animation,
+                          curve: Curves.easeOutCubic,
+                        )),
+                        child: FadeTransition(
+                          opacity: animation,
+                          child: TweenAnimationBuilder(
+                            duration: Duration(milliseconds: 300 + (index * 100)),
+                            tween: Tween<double>(begin: 0, end: 1),
+                            builder: (context, double value, child) {
+                              return Transform.translate(
+                                offset: Offset(0, 30 * (1 - value)),
+                                child: Opacity(
+                                  opacity: value,
+                                  child: StoryCardWidget(
+                                    story: filteredStories[index],
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        PageRouteBuilder(
+                                          pageBuilder: (context, animation, secondaryAnimation) =>
+                                              StoryDetailScreen(story: filteredStories[index]),
+                                          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                                            var begin = Offset(1.0, 0.0);
+                                            var end = Offset.zero;
+                                            var curve = Curves.ease;
+
+                                            var tween = Tween(begin: begin, end: end).chain(
+                                              CurveTween(curve: curve),
+                                            );
+
+                                            return SlideTransition(
+                                              position: animation.drive(tween),
+                                              child: child,
+                                            );
+                                          },
+                                          transitionDuration: Duration(milliseconds: 400),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              );
+                            },
                           ),
                         ),
                       );
                     },
-                  );
-                },
+                  ),
+                ),
               ),
             ),
           ],
         ),
       ),
-      floatingActionButton: Stack(
-        children: [
-          // Main Floating Action Button
-          Positioned(
-            bottom: 20,
-            right: 20,
-            child: FloatingActionButton(
-              backgroundColor: Colors.brown[700],
-              onPressed: () {
-                setState(() {
-                  showMenu = !showMenu; // Toggle the menu when clicked
-                });
-              },
-              child: Icon(
-                showMenu ? Icons.close : Icons.add, // Change icon based on showMenu state
-                color: Colors.white,
-              ),
-            ),
-          ),
-          // Floating Action Menu (Quiz and Add New Story)
-          if (showMenu)
+      floatingActionButton: ScaleTransition(
+        scale: _fabScaleAnimation,
+        child: Stack(
+          children: [
+            // Main Floating Action Button
             Positioned(
-              bottom: 100,
+              bottom: 20,
               right: 20,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  // Quiz Menu Item
-                  FloatingActionButton(
-                    backgroundColor: Colors.white,
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => QuizScreen()), // Navigate to Quiz screen
-                      );
-                    },
+              child: AnimatedContainer(
+                duration: Duration(milliseconds: 300),
+                child: FloatingActionButton(
+                  backgroundColor: Colors.brown[700],
+                  onPressed: () {
+                    setState(() {
+                      showMenu = !showMenu;
+                    });
+                  },
+                  child: AnimatedRotation(
+                    turns: showMenu ? 0.125 : 0,
+                    duration: Duration(milliseconds: 300),
                     child: Icon(
-                      Icons.quiz,
-                      color: Colors.brown[700],
+                      showMenu ? Icons.close : Icons.add,
+                      color: Colors.white,
                     ),
                   ),
-                  SizedBox(height: 10),
-                  // Add New Story Menu Item
-                  FloatingActionButton(
-                    backgroundColor: Colors.white,
-                    onPressed: () async {
-                      // Tutup menu terlebih dahulu
-                      setState(() {
-                        showMenu = false;
-                      });
-
-                      // Navigate to Add New Story screen dan tunggu hasil
-                      final newStory = await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => AddNewStoryScreen(),
-                        ),
-                      );
-
-                      // Jika ada cerita baru yang dikembalikan, tambahkan ke list
-                      if (newStory != null && newStory is Story) {
-                        _addNewStory(newStory);
-
-                        // Tampilkan konfirmasi bahwa cerita berhasil ditambahkan
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Row(
-                              children: [
-                                Icon(Icons.check_circle, color: Colors.white),
-                                SizedBox(width: 10),
-                                Expanded(
-                                  child: Text('Cerita "${newStory.title}" berhasil ditambahkan!'),
-                                ),
-                              ],
-                            ),
-                            backgroundColor: Colors.green,
-                            behavior: SnackBarBehavior.floating,
-                            duration: Duration(seconds: 3),
-                          ),
-                        );
-                      }
-                    },
-                    child: Icon(
-                      Icons.add,
-                      color: Colors.brown[700],
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
-        ],
+
+            // Animated Floating Action Menu
+            AnimatedPositioned(
+              duration: Duration(milliseconds: 400),
+              curve: Curves.easeOutBack,
+              bottom: showMenu ? 100 : 80,
+              right: 20,
+              child: AnimatedOpacity(
+                duration: Duration(milliseconds: 300),
+                opacity: showMenu ? 1.0 : 0.0,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    // Quiz Menu Item
+                    Transform.scale(
+                      scale: showMenu ? 1.0 : 0.0,
+                      child: FloatingActionButton(
+                        backgroundColor: Colors.white,
+                        heroTag: "quiz",
+                        onPressed: showMenu ? () {
+                          Navigator.push(
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder: (context, animation, secondaryAnimation) => QuizScreen(),
+                              transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                                return FadeTransition(
+                                  opacity: animation,
+                                  child: ScaleTransition(
+                                    scale: animation,
+                                    child: child,
+                                  ),
+                                );
+                              },
+                              transitionDuration: Duration(milliseconds: 300),
+                            ),
+                          );
+                        } : null,
+                        child: Icon(
+                          Icons.quiz,
+                          color: Colors.brown[700],
+                        ),
+                      ),
+                    ),
+
+                    SizedBox(height: 10),
+
+                    // Add New Story Menu Item
+                    Transform.scale(
+                      scale: showMenu ? 1.0 : 0.0,
+                      child: FloatingActionButton(
+                        backgroundColor: Colors.white,
+                        heroTag: "add_story",
+                        onPressed: showMenu ? () async {
+                          setState(() {
+                            showMenu = false;
+                          });
+
+                          final newStory = await Navigator.push(
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder: (context, animation, secondaryAnimation) => AddNewStoryScreen(),
+                              transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                                var begin = Offset(0.0, 1.0);
+                                var end = Offset.zero;
+                                var curve = Curves.ease;
+
+                                var tween = Tween(begin: begin, end: end).chain(
+                                  CurveTween(curve: curve),
+                                );
+
+                                return SlideTransition(
+                                  position: animation.drive(tween),
+                                  child: child,
+                                );
+                              },
+                              transitionDuration: Duration(milliseconds: 400),
+                            ),
+                          );
+
+                          if (newStory != null && newStory is Story) {
+                            _addNewStory(newStory);
+
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Row(
+                                  children: [
+                                    Icon(Icons.check_circle, color: Colors.white),
+                                    SizedBox(width: 10),
+                                    Expanded(
+                                      child: Text('Cerita "${newStory.title}" berhasil ditambahkan!'),
+                                    ),
+                                  ],
+                                ),
+                                backgroundColor: Colors.green,
+                                behavior: SnackBarBehavior.floating,
+                                duration: Duration(seconds: 3),
+                              ),
+                            );
+                          }
+                        } : null,
+                        child: Icon(
+                          Icons.add,
+                          color: Colors.brown[700],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
