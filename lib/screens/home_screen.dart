@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../navigasi/CustomBottomNavigation.dart';
 import 'quiz_screen.dart';
 import 'add_new_story_screen.dart';
 import '../models/story_model.dart';
@@ -16,6 +17,7 @@ class _HomeScreenState extends State<HomeScreen>
     with TickerProviderStateMixin {
   String selectedCategory = 'Semua';
   bool showMenu = false;
+  int _currentIndex = 0;
 
   // Animation Controllers
   late AnimationController _headerAnimationController;
@@ -173,6 +175,162 @@ class _HomeScreenState extends State<HomeScreen>
     });
   }
 
+  void _onBottomNavTap(int index) {
+    setState(() {
+      _currentIndex = index;
+      showMenu = false; // Close FAB menu when changing tabs
+    });
+
+    switch (index) {
+      case 0:
+      // Already on Home
+        break;
+      case 1:
+      // Navigate to Favorites (you can implement this)
+        _showComingSoonDialog('Favorit');
+        break;
+      case 2:
+      // Navigate to Quiz
+        Navigator.push(
+          context,
+          PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) => QuizScreen(),
+            transitionsBuilder: (context, animation, secondaryAnimation, child) {
+              return FadeTransition(
+                opacity: animation,
+                child: ScaleTransition(
+                  scale: animation,
+                  child: child,
+                ),
+              );
+            },
+            transitionDuration: Duration(milliseconds: 300),
+          ),
+        );
+        break;
+      case 3:
+      // Navigate to Profile (you can implement this)
+        _showComingSoonDialog('Profile');
+        break;
+    }
+  }
+
+  void _showComingSoonDialog(String feature) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Segera Hadir'),
+        content: Text('Fitur $feature akan segera tersedia dalam update berikutnya.'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHomeContent() {
+    return Column(
+      children: [
+        // Animated Header Widget
+        SlideTransition(
+          position: _headerSlideAnimation,
+          child: FadeTransition(
+            opacity: _headerFadeAnimation,
+            child: HeaderWidget(),
+          ),
+        ),
+
+        // Animated Category Filter
+        SlideTransition(
+          position: _contentSlideAnimation,
+          child: FadeTransition(
+            opacity: _contentFadeAnimation,
+            child: CategoryFilterWidget(
+              selectedCategory: selectedCategory,
+              onCategoryChanged: (category) {
+                setState(() {
+                  selectedCategory = category;
+                });
+              },
+            ),
+          ),
+        ),
+
+        // Animated Story List
+        Expanded(
+          child: SlideTransition(
+            position: _contentSlideAnimation,
+            child: FadeTransition(
+              opacity: _contentFadeAnimation,
+              child: AnimatedList(
+                padding: EdgeInsets.all(16),
+                initialItemCount: filteredStories.length,
+                itemBuilder: (context, index, animation) {
+                  if (index >= filteredStories.length) return SizedBox.shrink();
+
+                  return SlideTransition(
+                    position: Tween<Offset>(
+                      begin: Offset(1, 0),
+                      end: Offset.zero,
+                    ).animate(CurvedAnimation(
+                      parent: animation,
+                      curve: Curves.easeOutCubic,
+                    )),
+                    child: FadeTransition(
+                      opacity: animation,
+                      child: TweenAnimationBuilder(
+                        duration: Duration(milliseconds: 300 + (index * 100)),
+                        tween: Tween<double>(begin: 0, end: 1),
+                        builder: (context, double value, child) {
+                          return Transform.translate(
+                            offset: Offset(0, 30 * (1 - value)),
+                            child: Opacity(
+                              opacity: value,
+                              child: StoryCardWidget(
+                                story: filteredStories[index],
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    PageRouteBuilder(
+                                      pageBuilder: (context, animation, secondaryAnimation) =>
+                                          StoryDetailScreen(story: filteredStories[index]),
+                                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                                        var begin = Offset(1.0, 0.0);
+                                        var end = Offset.zero;
+                                        var curve = Curves.ease;
+
+                                        var tween = Tween(begin: begin, end: end).chain(
+                                          CurveTween(curve: curve),
+                                        );
+
+                                        return SlideTransition(
+                                          position: animation.drive(tween),
+                                          child: child,
+                                        );
+                                      },
+                                      transitionDuration: Duration(milliseconds: 400),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -192,245 +350,68 @@ class _HomeScreenState extends State<HomeScreen>
         ),
       ),
       body: SafeArea(
-        child: Column(
-          children: [
-            // Animated Header Widget
-            SlideTransition(
-              position: _headerSlideAnimation,
-              child: FadeTransition(
-                opacity: _headerFadeAnimation,
-                child: HeaderWidget(),
-              ),
-            ),
-
-            // Animated Category Filter
-            SlideTransition(
-              position: _contentSlideAnimation,
-              child: FadeTransition(
-                opacity: _contentFadeAnimation,
-                child: CategoryFilterWidget(
-                  selectedCategory: selectedCategory,
-                  onCategoryChanged: (category) {
-                    setState(() {
-                      selectedCategory = category;
-                    });
-                  },
-                ),
-              ),
-            ),
-
-            // Animated Story List
-            Expanded(
-              child: SlideTransition(
-                position: _contentSlideAnimation,
-                child: FadeTransition(
-                  opacity: _contentFadeAnimation,
-                  child: AnimatedList(
-                    padding: EdgeInsets.all(16),
-                    initialItemCount: filteredStories.length,
-                    itemBuilder: (context, index, animation) {
-                      if (index >= filteredStories.length) return SizedBox.shrink();
-
-                      return SlideTransition(
-                        position: Tween<Offset>(
-                          begin: Offset(1, 0),
-                          end: Offset.zero,
-                        ).animate(CurvedAnimation(
-                          parent: animation,
-                          curve: Curves.easeOutCubic,
-                        )),
-                        child: FadeTransition(
-                          opacity: animation,
-                          child: TweenAnimationBuilder(
-                            duration: Duration(milliseconds: 300 + (index * 100)),
-                            tween: Tween<double>(begin: 0, end: 1),
-                            builder: (context, double value, child) {
-                              return Transform.translate(
-                                offset: Offset(0, 30 * (1 - value)),
-                                child: Opacity(
-                                  opacity: value,
-                                  child: StoryCardWidget(
-                                    story: filteredStories[index],
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        PageRouteBuilder(
-                                          pageBuilder: (context, animation, secondaryAnimation) =>
-                                              StoryDetailScreen(story: filteredStories[index]),
-                                          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                                            var begin = Offset(1.0, 0.0);
-                                            var end = Offset.zero;
-                                            var curve = Curves.ease;
-
-                                            var tween = Tween(begin: begin, end: end).chain(
-                                              CurveTween(curve: curve),
-                                            );
-
-                                            return SlideTransition(
-                                              position: animation.drive(tween),
-                                              child: child,
-                                            );
-                                          },
-                                          transitionDuration: Duration(milliseconds: 400),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
+        child: _buildHomeContent(),
+      ),
+      bottomNavigationBar: CustomBottomNavigation(
+        currentIndex: _currentIndex,
+        onTap: _onBottomNavTap,
       ),
       floatingActionButton: ScaleTransition(
         scale: _fabScaleAnimation,
-        child: Stack(
-          children: [
-            // Main Floating Action Button
-            Positioned(
-              bottom: 20,
-              right: 20,
-              child: AnimatedContainer(
-                duration: Duration(milliseconds: 300),
-                child: FloatingActionButton(
-                  backgroundColor: Colors.brown[700],
-                  onPressed: () {
-                    setState(() {
-                      showMenu = !showMenu;
-                    });
-                  },
-                  child: AnimatedRotation(
-                    turns: showMenu ? 0.125 : 0,
-                    duration: Duration(milliseconds: 300),
-                    child: Icon(
-                      showMenu ? Icons.close : Icons.add,
-                      color: Colors.white,
-                    ),
+        child: FloatingActionButton(
+          backgroundColor: Colors.brown[700],
+          onPressed: () async {
+            final newStory = await Navigator.push(
+              context,
+              PageRouteBuilder(
+                pageBuilder: (context, animation, secondaryAnimation) => AddNewStoryScreen(),
+                transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                  var begin = Offset(0.0, 1.0);
+                  var end = Offset.zero;
+                  var curve = Curves.ease;
+
+                  var tween = Tween(begin: begin, end: end).chain(
+                    CurveTween(curve: curve),
+                  );
+
+                  return SlideTransition(
+                    position: animation.drive(tween),
+                    child: child,
+                  );
+                },
+                transitionDuration: Duration(milliseconds: 400),
+              ),
+            );
+
+            if (newStory != null && newStory is Story) {
+              _addNewStory(newStory);
+
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Row(
+                    children: [
+                      Icon(Icons.check_circle, color: Colors.white),
+                      SizedBox(width: 10),
+                      Expanded(
+                        child: Text('Cerita "${newStory.title}" berhasil ditambahkan!'),
+                      ),
+                    ],
                   ),
+                  backgroundColor: Colors.green,
+                  behavior: SnackBarBehavior.floating,
+                  duration: Duration(seconds: 3),
                 ),
-              ),
-            ),
-
-            // Animated Floating Action Menu
-            AnimatedPositioned(
-              duration: Duration(milliseconds: 400),
-              curve: Curves.easeOutBack,
-              bottom: showMenu ? 100 : 80,
-              right: 20,
-              child: AnimatedOpacity(
-                duration: Duration(milliseconds: 300),
-                opacity: showMenu ? 1.0 : 0.0,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    // Quiz Menu Item
-                    Transform.scale(
-                      scale: showMenu ? 1.0 : 0.0,
-                      child: FloatingActionButton(
-                        backgroundColor: Colors.white,
-                        heroTag: "quiz",
-                        onPressed: showMenu ? () {
-                          Navigator.push(
-                            context,
-                            PageRouteBuilder(
-                              pageBuilder: (context, animation, secondaryAnimation) => QuizScreen(),
-                              transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                                return FadeTransition(
-                                  opacity: animation,
-                                  child: ScaleTransition(
-                                    scale: animation,
-                                    child: child,
-                                  ),
-                                );
-                              },
-                              transitionDuration: Duration(milliseconds: 300),
-                            ),
-                          );
-                        } : null,
-                        child: Icon(
-                          Icons.quiz,
-                          color: Colors.brown[700],
-                        ),
-                      ),
-                    ),
-
-                    SizedBox(height: 10),
-
-                    // Add New Story Menu Item
-                    Transform.scale(
-                      scale: showMenu ? 1.0 : 0.0,
-                      child: FloatingActionButton(
-                        backgroundColor: Colors.white,
-                        heroTag: "add_story",
-                        onPressed: showMenu ? () async {
-                          setState(() {
-                            showMenu = false;
-                          });
-
-                          final newStory = await Navigator.push(
-                            context,
-                            PageRouteBuilder(
-                              pageBuilder: (context, animation, secondaryAnimation) => AddNewStoryScreen(),
-                              transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                                var begin = Offset(0.0, 1.0);
-                                var end = Offset.zero;
-                                var curve = Curves.ease;
-
-                                var tween = Tween(begin: begin, end: end).chain(
-                                  CurveTween(curve: curve),
-                                );
-
-                                return SlideTransition(
-                                  position: animation.drive(tween),
-                                  child: child,
-                                );
-                              },
-                              transitionDuration: Duration(milliseconds: 400),
-                            ),
-                          );
-
-                          if (newStory != null && newStory is Story) {
-                            _addNewStory(newStory);
-
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Row(
-                                  children: [
-                                    Icon(Icons.check_circle, color: Colors.white),
-                                    SizedBox(width: 10),
-                                    Expanded(
-                                      child: Text('Cerita "${newStory.title}" berhasil ditambahkan!'),
-                                    ),
-                                  ],
-                                ),
-                                backgroundColor: Colors.green,
-                                behavior: SnackBarBehavior.floating,
-                                duration: Duration(seconds: 3),
-                              ),
-                            );
-                          }
-                        } : null,
-                        child: Icon(
-                          Icons.add,
-                          color: Colors.brown[700],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
+              );
+            }
+          },
+          tooltip: 'Tambah Cerita Baru',
+          child: Icon(
+            Icons.add,
+            color: Colors.white,
+          ),
         ),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }
