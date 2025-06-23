@@ -10,7 +10,7 @@ android {
     compileSdk = 35 // Use the appropriate SDK version, or link it to flutter.compileSdkVersion if you prefer.
 
     // Set the NDK version explicitly to match the required version
-    ndkVersion = "27.0.12077973" // Update this to the highest version that matches the plugin requirements
+    ndkVersion = "21.4.7075529" // This is a more stable version; you may use 27 if it's required for your project
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
