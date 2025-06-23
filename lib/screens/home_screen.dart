@@ -354,7 +354,7 @@ class _HomeScreenState extends State<HomeScreen>
       ),
       bottomNavigationBar: CustomBottomNavigation(
         currentIndex: _currentIndex,
-        onTap: _onBottomNavTap,
+        onTap: _onBottomNavTap, favoriteStories: [], onRemoveFromFavorites: (Story ) {  },
       ),
       floatingActionButton: ScaleTransition(
         scale: _fabScaleAnimation,

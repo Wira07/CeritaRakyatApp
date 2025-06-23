@@ -175,7 +175,7 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           SizedBox(height: 16),
           Text(
-            'John Doe',
+            'Sri Yanti S.Pd',
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
@@ -184,7 +184,7 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           SizedBox(height: 4),
           Text(
-            'john.doe@email.com',
+            'sriyanti@gmail.com',
             style: TextStyle(
               fontSize: 16,
               color: Colors.grey[600],
