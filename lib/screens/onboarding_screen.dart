@@ -1,3 +1,4 @@
+import 'package:ceritarakyatapp/login/LoginScreen.dart';
 import 'package:flutter/material.dart';
 import 'home_screen.dart';
 
@@ -36,14 +37,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Colors.brown[50]!,
-              Colors.brown[100]!,
-            ],
-          ),
+          color: Colors.white, // Background putih
         ),
         child: SafeArea(
           child: Column(
@@ -66,7 +60,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       onPressed: () {
                         Navigator.pushReplacement(
                           context,
-                          MaterialPageRoute(builder: (context) => HomeScreen()),
+                          MaterialPageRoute(builder: (context) => LoginScreen()),
                         );
                       },
                       child: Text(
@@ -153,7 +147,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           Navigator.pushReplacement(
                             context,
                             PageRouteBuilder(
-                              pageBuilder: (context, animation, secondaryAnimation) => HomeScreen(),
+                              pageBuilder: (context, animation, secondaryAnimation) => LoginScreen(),
                               transitionsBuilder: (context, animation, secondaryAnimation, child) {
                                 var begin = Offset(1.0, 0.0);
                                 var end = Offset.zero;

@@ -132,23 +132,39 @@ class _LoginFormState extends State<LoginForm> {
 
   Widget _buildRememberMeRow() {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Checkbox(
-          value: _rememberMe,
-          onChanged: (value) {
-            setState(() {
-              _rememberMe = value ?? false;
-            });
-          },
-          activeColor: Colors.brown[700],
+        // Bagian kiri - Checkbox dan "Ingat saya"
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Checkbox(
+              value: _rememberMe,
+              onChanged: (value) {
+                setState(() {
+                  _rememberMe = value ?? false;
+                });
+              },
+              activeColor: Colors.brown[700],
+              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              visualDensity: VisualDensity.compact,
+            ),
+            SizedBox(width: 4),
+            Text(
+              'Ingat saya',
+              style: TextStyle(color: Colors.brown[600]),
+            ),
+          ],
         ),
-        Text(
-          'Ingat saya',
-          style: TextStyle(color: Colors.brown[600]),
-        ),
-        Spacer(),
+
+        // Bagian kanan - "Lupa password?"
         TextButton(
           onPressed: _showForgotPasswordDialog,
+          style: TextButton.styleFrom(
+            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            minimumSize: Size.zero,
+            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          ),
           child: Text(
             'Lupa password?',
             style: TextStyle(color: Colors.brown[700]),
