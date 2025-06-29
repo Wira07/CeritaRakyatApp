@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ceritarakyatapp/register/RegisterScreen.dart';
-import '../screens/home_screen.dart';
+import '../screens/dashboard/components/home_screen.dart';
 import 'auth/auth_service.dart';
 import 'form/login_animations.dart';
 import 'form/login_button.dart';
