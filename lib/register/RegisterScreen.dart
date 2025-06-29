@@ -1,8 +1,21 @@
 import 'package:flutter/material.dart';
+import 'form/register_form.dart';
+// import 'register_form.dart';
 
-class RegisterScreen extends StatelessWidget {
-  // Hapus semua required parameters untuk screen
+class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
+
+  @override
+  State<RegisterScreen> createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
+  final _formKey = GlobalKey<FormState>();
+  final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
+  bool _acceptTerms = false;
 
   @override
   Widget build(BuildContext context) {
@@ -67,35 +80,36 @@ class RegisterScreen extends StatelessWidget {
 
               SizedBox(height: 40),
 
-              // Form fields bisa ditambahkan di sini
+              RegisterForm(
+                formKey: _formKey,
+                nameController: _nameController,
+                emailController: _emailController,
+                passwordController: _passwordController,
+                confirmPasswordController: _confirmPasswordController,
+                acceptTerms: _acceptTerms,
+                onTermsChanged: (v) => setState(() => _acceptTerms = v),
+                onShowTermsDialog: () {},
+                onShowPrivacyDialog: () {},
+              ),
+
+              SizedBox(height: 24),
+
               Container(
                 width: double.infinity,
                 height: 56,
                 child: ElevatedButton(
                   onPressed: () {
-                    // Handle register logic
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('Fitur registrasi akan segera hadir!'),
-                        backgroundColor: Colors.brown[700],
-                      ),
-                    );
+                    if (_formKey.currentState!.validate() && _acceptTerms) {
+                      Navigator.pop(context);
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.brown[700],
                     foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     elevation: 3,
                   ),
-                  child: Text(
-                    'Daftar',
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600
-                    ),
-                  ),
+                  child: Text('Daftar', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
                 ),
               ),
 
