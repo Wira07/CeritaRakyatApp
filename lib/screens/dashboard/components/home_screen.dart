@@ -187,7 +187,7 @@ class _HomeScreenState extends State<HomeScreen>
         break;
       case 1:
       // Navigate to Favorites (you can implement this)
-        _showComingSoonDialog('Favorit');
+      //   _showComingSoonDialog('Favorit');
         break;
       case 2:
       // Navigate to Quiz
@@ -210,27 +210,9 @@ class _HomeScreenState extends State<HomeScreen>
         break;
       case 3:
       // Navigate to Profile (you can implement this)
-        _showComingSoonDialog('Profile');
         break;
     }
   }
-
-  void _showComingSoonDialog(String feature) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text('Segera Hadir'),
-        content: Text('Fitur $feature akan segera tersedia dalam update berikutnya.'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text('OK'),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildHomeContent() {
     return Column(
       children: [
