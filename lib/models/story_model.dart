@@ -1,3 +1,5 @@
+import '../../../models/story_model.dart';
+
 class Story {
   final String id;
   final String title;
@@ -65,40 +67,3 @@ class Story {
     );
   }
 }
-
-
-// class Story {
-//   final String id;
-//   final String title;
-//   final String region;
-//   final String category;
-//   final String description;
-//   final String audioUrl;
-//   final String imageUrl;
-//   final Duration duration;
-//   final String wisdom;
-//
-//   Story({
-//     required this.id,
-//     required this.title,
-//     required this.region,
-//     required this.category,
-//     required this.description,
-//     required this.audioUrl,
-//     required this.imageUrl,
-//     required this.duration,
-//     required this.wisdom,
-//   });
-// }
-//
-// class QuizQuestion {
-//   final String question;
-//   final List<String> options;
-//   final int correctAnswer;
-//
-//   QuizQuestion({
-//     required this.question,
-//     required this.options,
-//     required this.correctAnswer,
-//   });
-// }
