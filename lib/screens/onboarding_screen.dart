@@ -1,6 +1,6 @@
 import 'package:ceritarakyatapp/login/LoginScreen.dart';
 import 'package:flutter/material.dart';
-import 'home_screen.dart';
+import 'dashboard/components/home_screen.dart';
 
 class OnboardingScreen extends StatefulWidget {
   @override
