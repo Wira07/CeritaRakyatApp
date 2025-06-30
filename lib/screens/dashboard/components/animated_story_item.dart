@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../models/story_model.dart';
 import '../../../widgets/story/story_card_widget.dart';
-import '../../story_detail_screen.dart';
+import '../../story_detail/story_detail_screen.dart';
 
 class AnimatedStoryItem extends StatelessWidget {
   final Story story;
