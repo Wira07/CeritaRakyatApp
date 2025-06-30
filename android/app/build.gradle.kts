@@ -7,10 +7,10 @@ plugins {
 
 android {
     namespace = "com.example.ceritarakyatapp"
-    compileSdk = 35 // Use the appropriate SDK version, or link it to flutter.compileSdkVersion if you prefer.
+    compileSdk = 35
 
-    // Set the NDK version explicitly to match the required version
-    ndkVersion = "27.0.12077973" // Update to match the version required by the plugins
+    // Remove explicit NDK version to use the default
+    // ndkVersion = "27.0.12077973"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -24,18 +24,18 @@ android {
     defaultConfig {
         applicationId = "com.example.ceritarakyatapp"
         minSdk = 21
-        targetSdk = 33 // Ensure it matches flutter.targetSdkVersion
-        versionCode = 1 // Replace with appropriate version code
-        versionName = "1.0.0" // Replace with appropriate version name
+        targetSdk = 35 // Updated to match compileSdk
+        versionCode = 1
+        versionName = "1.0.0"
     }
 
     buildTypes {
         release {
-            signingConfig = signingConfigs.getByName("debug") // Use the appropriate signing configuration
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
 }
 
 flutter {
-    source = "../.." // Ensure the correct path to the Flutter project
+    source = "../.."
 }
