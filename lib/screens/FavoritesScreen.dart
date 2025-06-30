@@ -1,8 +1,8 @@
+import 'package:ceritarakyatapp/screens/story_detail/story_detail_screen.dart';
 import 'package:flutter/material.dart';
 import '../models/story_model.dart';
 import '../widgets/common/header_widget.dart';
 import '../widgets/story/story_card_widget.dart';
-import 'story_detail_screen.dart';
 
 class FavoritesScreen extends StatefulWidget {
   final List<Story> favoriteStories;
