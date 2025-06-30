@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import '../models/story_model.dart';
-import '../widgets/audio/audio_player_widget.dart';
-import '../widgets/quiz/quiz_widget.dart';
-import '../widgets/story/story_content_widget.dart';
-import '../widgets/story/wisdom_card_widget.dart';
+import '../../models/story_model.dart';
+import '../../widgets/audio/audio_player_widget.dart';
+import '../../widgets/quiz/quiz_widget.dart';
+import '../../widgets/story/story_content_widget.dart';
+import '../../widgets/story/wisdom_card_widget.dart';
 
 class StoryDetailScreen extends StatefulWidget {
   final Story story;

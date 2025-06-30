@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/story_model.dart';
-import '../screens/ProfilePage.dart';
+import '../screens/profile/ProfilePage.dart';
 import '../screens/FavoritesScreen.dart'; // Import FavoritesScreen
 
 class CustomBottomNavigation extends StatelessWidget {
@@ -10,12 +10,12 @@ class CustomBottomNavigation extends StatelessWidget {
   final Function(Story) onRemoveFromFavorites; // Callback function to remove favorites
 
   const CustomBottomNavigation({
-    Key? key,
+    super.key,
     required this.currentIndex,
     required this.onTap,
     required this.favoriteStories, // Pass the favorite stories
     required this.onRemoveFromFavorites, // Pass the callback function
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
