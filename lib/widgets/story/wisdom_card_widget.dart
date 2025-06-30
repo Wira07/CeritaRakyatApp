@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class WisdomCardWidget extends StatelessWidget {
   final String wisdom;
 
-  const WisdomCardWidget({required this.wisdom});
+  const WisdomCardWidget({super.key, required this.wisdom});
 
   @override
   Widget build(BuildContext context) {
