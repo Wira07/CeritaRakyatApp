@@ -5,7 +5,7 @@ import '../../models/story_model.dart';
 class StoryContentWidget extends StatelessWidget {
   final Story story;
 
-  const StoryContentWidget({required this.story});
+  const StoryContentWidget({super.key, required this.story});
 
   @override
   Widget build(BuildContext context) {
