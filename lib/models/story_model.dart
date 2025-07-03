@@ -66,4 +66,6 @@ class Story {
       createdAt: DateTime.parse(json['createdAt']),
     );
   }
+
+  get content => null;
 }
