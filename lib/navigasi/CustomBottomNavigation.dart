@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import '../models/story_model.dart';
 import '../screens/profile/ProfilePage.dart';
-import '../screens/FavoritesScreen.dart'; // Import FavoritesScreen
+import '../screens/favorite/FavoritesScreen.dart'; // Import FavoritesScreen
 
 class CustomBottomNavigation extends StatelessWidget {
   final int currentIndex;
   final Function(int) onTap;
   final List<Story> favoriteStories; // Add this to pass the favorites
-  final Function(Story) onRemoveFromFavorites; // Callback function to remove favorites
+  final Function(Story)
+  onRemoveFromFavorites; // Callback function to remove favorites
 
   const CustomBottomNavigation({
     super.key,
@@ -50,8 +51,10 @@ class CustomBottomNavigation extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (context) => FavoritesScreen(
-                    favoriteStories: favoriteStories, // Pass the favorite stories
-                    onRemoveFromFavorites: onRemoveFromFavorites, // Pass the callback function
+                    favoriteStories:
+                        favoriteStories, // Pass the favorite stories
+                    onRemoveFromFavorites:
+                        onRemoveFromFavorites, // Pass the callback function
                   ),
                 ),
               );
@@ -71,15 +74,15 @@ class CustomBottomNavigation extends StatelessWidget {
             fontWeight: FontWeight.bold,
             fontSize: 12,
           ),
-          unselectedLabelStyle: TextStyle(
-            fontSize: 11,
-          ),
+          unselectedLabelStyle: TextStyle(fontSize: 11),
           items: [
             BottomNavigationBarItem(
               icon: Container(
                 padding: EdgeInsets.all(6),
                 decoration: BoxDecoration(
-                  color: currentIndex == 0 ? Colors.brown[700]?.withOpacity(0.1) : Colors.transparent,
+                  color: currentIndex == 0
+                      ? Colors.brown[700]?.withOpacity(0.1)
+                      : Colors.transparent,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(Icons.home, size: 24),
@@ -90,7 +93,9 @@ class CustomBottomNavigation extends StatelessWidget {
               icon: Container(
                 padding: EdgeInsets.all(6),
                 decoration: BoxDecoration(
-                  color: currentIndex == 1 ? Colors.brown[700]?.withOpacity(0.1) : Colors.transparent,
+                  color: currentIndex == 1
+                      ? Colors.brown[700]?.withOpacity(0.1)
+                      : Colors.transparent,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(Icons.favorite, size: 24),
@@ -101,7 +106,9 @@ class CustomBottomNavigation extends StatelessWidget {
               icon: Container(
                 padding: EdgeInsets.all(6),
                 decoration: BoxDecoration(
-                  color: currentIndex == 2 ? Colors.brown[700]?.withOpacity(0.1) : Colors.transparent,
+                  color: currentIndex == 2
+                      ? Colors.brown[700]?.withOpacity(0.1)
+                      : Colors.transparent,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(Icons.quiz, size: 24),
@@ -112,7 +119,9 @@ class CustomBottomNavigation extends StatelessWidget {
               icon: Container(
                 padding: EdgeInsets.all(6),
                 decoration: BoxDecoration(
-                  color: currentIndex == 3 ? Colors.brown[700]?.withOpacity(0.1) : Colors.transparent,
+                  color: currentIndex == 3
+                      ? Colors.brown[700]?.withOpacity(0.1)
+                      : Colors.transparent,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(Icons.person, size: 24),
