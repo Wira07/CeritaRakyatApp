@@ -35,7 +35,7 @@ class _StoryDetailScreenState extends State<StoryDetailScreen> {
               audioUrl: widget.story.audioUrl,
               onPlayComplete: () {
                 setState(() {
-                  isAudioCompleted = true;  // Set to true when audio finishes
+                  isAudioCompleted = true; // Set to true when audio finishes
                 });
               },
             ),
@@ -51,8 +51,10 @@ class _StoryDetailScreenState extends State<StoryDetailScreen> {
                     });
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.brown[600], // Use backgroundColor instead of primary
-                    foregroundColor: Colors.white,      // Use foregroundColor instead of onPrimary
+                    backgroundColor: Colors
+                        .brown[600], // Use backgroundColor instead of primary
+                    foregroundColor: Colors
+                        .white, // Use foregroundColor instead of onPrimary
                     padding: EdgeInsets.symmetric(vertical: 12),
                   ),
                   child: Text('Start Quiz'),

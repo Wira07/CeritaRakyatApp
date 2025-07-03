@@ -12,6 +12,7 @@ class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _HomeScreenState createState() => _HomeScreenState();
 }
 
@@ -108,15 +109,16 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               PageRouteBuilder(
                 pageBuilder: (context, animation, secondaryAnimation) =>
                     AddNewStoryScreen(),
-                transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                  return SlideTransition(
-                    position: Tween<Offset>(
-                      begin: Offset(0.0, 1.0),
-                      end: Offset.zero,
-                    ).animate(animation),
-                    child: child,
-                  );
-                },
+                transitionsBuilder:
+                    (context, animation, secondaryAnimation, child) {
+                      return SlideTransition(
+                        position: Tween<Offset>(
+                          begin: Offset(0.0, 1.0),
+                          end: Offset.zero,
+                        ).animate(animation),
+                        child: child,
+                      );
+                    },
                 transitionDuration: Duration(milliseconds: 400),
               ),
             );
@@ -141,9 +143,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           children: [
             Icon(Icons.check_circle, color: Colors.white),
             SizedBox(width: 10),
-            Expanded(
-              child: Text('Cerita "$title" berhasil ditambahkan!'),
-            ),
+            Expanded(child: Text('Cerita "$title" berhasil ditambahkan!')),
           ],
         ),
         backgroundColor: Colors.green,

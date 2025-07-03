@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'onboarding_screen.dart'; // Changed from home_screen.dart to onboarding_screen.dart
+import '../onboarding_screen.dart'; // Changed from home_screen.dart to onboarding_screen.dart
 
 class SplashScreen extends StatefulWidget {
   @override

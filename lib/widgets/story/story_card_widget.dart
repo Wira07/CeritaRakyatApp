@@ -5,11 +5,7 @@ class StoryCardWidget extends StatefulWidget {
   final Story story;
   final VoidCallback onTap;
 
-  const StoryCardWidget({
-    super.key,
-    required this.story,
-    required this.onTap,
-  });
+  const StoryCardWidget({super.key, required this.story, required this.onTap});
 
   @override
   State<StoryCardWidget> createState() => _StoryCardWidgetState();
@@ -30,21 +26,13 @@ class _StoryCardWidgetState extends State<StoryCardWidget>
       vsync: this,
     );
 
-    _scaleAnimation = Tween<double>(
-      begin: 1.0,
-      end: 0.96,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeInOut,
-    ));
+    _scaleAnimation = Tween<double>(begin: 1.0, end: 0.96).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
+    );
 
-    _shadowAnimation = Tween<double>(
-      begin: 8.0,
-      end: 2.0,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeInOut,
-    ));
+    _shadowAnimation = Tween<double>(begin: 8.0, end: 2.0).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
+    );
   }
 
   @override
@@ -108,10 +96,7 @@ class _StoryCardWidgetState extends State<StoryCardWidget>
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  colors: [
-                    Colors.white,
-                    Colors.grey[50]!,
-                  ],
+                  colors: [Colors.white, Colors.grey[50]!],
                 ),
                 boxShadow: [
                   BoxShadow(
@@ -121,7 +106,9 @@ class _StoryCardWidgetState extends State<StoryCardWidget>
                     spreadRadius: 1,
                   ),
                   BoxShadow(
-                    color: _getCategoryColor(widget.story.category).withOpacity(0.1),
+                    color: _getCategoryColor(
+                      widget.story.category,
+                    ).withOpacity(0.1),
                     blurRadius: _shadowAnimation.value * 2,
                     offset: Offset(0, _shadowAnimation.value),
                     spreadRadius: -2,
@@ -141,7 +128,9 @@ class _StoryCardWidgetState extends State<StoryCardWidget>
                         height: 100,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: _getCategoryColor(widget.story.category).withOpacity(0.02),
+                          color: _getCategoryColor(
+                            widget.story.category,
+                          ).withOpacity(0.02),
                         ),
                       ),
                     ),
@@ -163,12 +152,18 @@ class _StoryCardWidgetState extends State<StoryCardWidget>
                                   begin: Alignment.topLeft,
                                   end: Alignment.bottomRight,
                                   colors: [
-                                    _getCategoryColor(widget.story.category).withOpacity(0.15),
-                                    _getCategoryColor(widget.story.category).withOpacity(0.05),
+                                    _getCategoryColor(
+                                      widget.story.category,
+                                    ).withOpacity(0.15),
+                                    _getCategoryColor(
+                                      widget.story.category,
+                                    ).withOpacity(0.05),
                                   ],
                                 ),
                                 border: Border.all(
-                                  color: _getCategoryColor(widget.story.category).withOpacity(0.2),
+                                  color: _getCategoryColor(
+                                    widget.story.category,
+                                  ).withOpacity(0.2),
                                   width: 1.5,
                                 ),
                               ),
@@ -178,7 +173,9 @@ class _StoryCardWidgetState extends State<StoryCardWidget>
                                     child: Icon(
                                       _getCategoryIcon(widget.story.category),
                                       size: 36,
-                                      color: _getCategoryColor(widget.story.category).withOpacity(0.6),
+                                      color: _getCategoryColor(
+                                        widget.story.category,
+                                      ).withOpacity(0.6),
                                     ),
                                   ),
                                   // Shimmer effect
@@ -214,10 +211,7 @@ class _StoryCardWidgetState extends State<StoryCardWidget>
                                 // Title with gradient text
                                 ShaderMask(
                                   shaderCallback: (bounds) => LinearGradient(
-                                    colors: [
-                                      Colors.black87,
-                                      Colors.black54,
-                                    ],
+                                    colors: [Colors.black87, Colors.black54],
                                   ).createShader(bounds),
                                   child: Text(
                                     widget.story.title,
@@ -240,7 +234,9 @@ class _StoryCardWidgetState extends State<StoryCardWidget>
                                     Icon(
                                       Icons.location_on_rounded,
                                       size: 16,
-                                      color: _getCategoryColor(widget.story.category),
+                                      color: _getCategoryColor(
+                                        widget.story.category,
+                                      ),
                                     ),
                                     SizedBox(width: 4),
                                     Expanded(
@@ -248,7 +244,9 @@ class _StoryCardWidgetState extends State<StoryCardWidget>
                                         widget.story.region,
                                         style: TextStyle(
                                           fontSize: 14,
-                                          color: _getCategoryColor(widget.story.category).withOpacity(0.8),
+                                          color: _getCategoryColor(
+                                            widget.story.category,
+                                          ).withOpacity(0.8),
                                           fontWeight: FontWeight.w500,
                                         ),
                                         maxLines: 1,
@@ -301,7 +299,9 @@ class _StoryCardWidgetState extends State<StoryCardWidget>
                                           ),
                                           SizedBox(width: 4),
                                           Text(
-                                            _formatDuration(widget.story.duration),
+                                            _formatDuration(
+                                              widget.story.duration,
+                                            ),
                                             style: TextStyle(
                                               fontSize: 12,
                                               color: Colors.grey[600],
@@ -323,13 +323,19 @@ class _StoryCardWidgetState extends State<StoryCardWidget>
                                       decoration: BoxDecoration(
                                         gradient: LinearGradient(
                                           colors: [
-                                            _getCategoryColor(widget.story.category).withOpacity(0.12),
-                                            _getCategoryColor(widget.story.category).withOpacity(0.06),
+                                            _getCategoryColor(
+                                              widget.story.category,
+                                            ).withOpacity(0.12),
+                                            _getCategoryColor(
+                                              widget.story.category,
+                                            ).withOpacity(0.06),
                                           ],
                                         ),
                                         borderRadius: BorderRadius.circular(20),
                                         border: Border.all(
-                                          color: _getCategoryColor(widget.story.category).withOpacity(0.2),
+                                          color: _getCategoryColor(
+                                            widget.story.category,
+                                          ).withOpacity(0.2),
                                           width: 1,
                                         ),
                                       ),
@@ -337,7 +343,9 @@ class _StoryCardWidgetState extends State<StoryCardWidget>
                                         widget.story.category,
                                         style: TextStyle(
                                           fontSize: 11,
-                                          color: _getCategoryColor(widget.story.category).withOpacity(0.8),
+                                          color: _getCategoryColor(
+                                            widget.story.category,
+                                          ).withOpacity(0.8),
                                           fontWeight: FontWeight.w500,
                                           letterSpacing: 0.3,
                                         ),
@@ -363,17 +371,27 @@ class _StoryCardWidgetState extends State<StoryCardWidget>
                                 end: Alignment.bottomRight,
                                 colors: _isPressed
                                     ? [
-                                  _getCategoryColor(widget.story.category).withOpacity(0.6),
-                                  _getCategoryColor(widget.story.category).withOpacity(0.4),
-                                ]
+                                        _getCategoryColor(
+                                          widget.story.category,
+                                        ).withOpacity(0.6),
+                                        _getCategoryColor(
+                                          widget.story.category,
+                                        ).withOpacity(0.4),
+                                      ]
                                     : [
-                                  _getCategoryColor(widget.story.category).withOpacity(0.8),
-                                  _getCategoryColor(widget.story.category).withOpacity(0.6),
-                                ],
+                                        _getCategoryColor(
+                                          widget.story.category,
+                                        ).withOpacity(0.8),
+                                        _getCategoryColor(
+                                          widget.story.category,
+                                        ).withOpacity(0.6),
+                                      ],
                               ),
                               boxShadow: [
                                 BoxShadow(
-                                  color: _getCategoryColor(widget.story.category).withOpacity(0.2),
+                                  color: _getCategoryColor(
+                                    widget.story.category,
+                                  ).withOpacity(0.2),
                                   blurRadius: _isPressed ? 4 : 8,
                                   offset: Offset(0, _isPressed ? 2 : 4),
                                 ),
@@ -396,8 +414,12 @@ class _StoryCardWidgetState extends State<StoryCardWidget>
                         child: InkWell(
                           borderRadius: BorderRadius.circular(20),
                           onTap: widget.onTap,
-                          splashColor: _getCategoryColor(widget.story.category).withOpacity(0.06),
-                          highlightColor: _getCategoryColor(widget.story.category).withOpacity(0.03),
+                          splashColor: _getCategoryColor(
+                            widget.story.category,
+                          ).withOpacity(0.06),
+                          highlightColor: _getCategoryColor(
+                            widget.story.category,
+                          ).withOpacity(0.03),
                         ),
                       ),
                     ),

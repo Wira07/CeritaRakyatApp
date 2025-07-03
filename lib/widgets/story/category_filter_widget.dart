@@ -29,11 +29,7 @@ class CategoryFilterWidget extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
             child: Row(
               children: [
-                Icon(
-                  Icons.category,
-                  color: Color(0xFF8D4E36),
-                  size: 20,
-                ),
+                Icon(Icons.category, color: Color(0xFF8D4E36), size: 20),
                 SizedBox(width: 8),
                 Text(
                   'Kategori Cerita',
@@ -66,17 +62,17 @@ class CategoryFilterWidget extends StatelessWidget {
                     child: AnimatedContainer(
                       duration: Duration(milliseconds: 200),
                       curve: Curves.easeInOut,
-                      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
                       decoration: BoxDecoration(
                         gradient: isSelected
                             ? LinearGradient(
-                          colors: [
-                            Color(0xFF8D4E36),
-                            Color(0xFFB7926C),
-                          ],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        )
+                                colors: [Color(0xFF8D4E36), Color(0xFFB7926C)],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              )
                             : null,
                         color: isSelected ? null : Colors.white,
                         borderRadius: BorderRadius.circular(25),
@@ -194,10 +190,10 @@ class SimpleCategoryFilterWidget extends StatelessWidget {
                 decoration: BoxDecoration(
                   gradient: isSelected
                       ? LinearGradient(
-                    colors: [Color(0xFF8D4E36), Color(0xFFB7926C)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  )
+                          colors: [Color(0xFF8D4E36), Color(0xFFB7926C)],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        )
                       : null,
                   color: isSelected ? null : Colors.white,
                   borderRadius: BorderRadius.circular(22),

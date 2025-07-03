@@ -8,11 +8,11 @@ class StoryList extends StatelessWidget {
   final Animation<Offset> slideAnimation;
 
   const StoryList({
-    Key? key,
+    super.key,
     required this.stories,
     required this.fadeAnimation,
     required this.slideAnimation,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -9,11 +9,11 @@ class AnimatedStoryItem extends StatelessWidget {
   final Animation<double> animation;
 
   const AnimatedStoryItem({
-    Key? key,
+    super.key,
     required this.story,
     required this.index,
     required this.animation,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -21,10 +21,7 @@ class AnimatedStoryItem extends StatelessWidget {
       position: Tween<Offset>(
         begin: Offset(1, 0),
         end: Offset.zero,
-      ).animate(CurvedAnimation(
-        parent: animation,
-        curve: Curves.easeOutCubic,
-      )),
+      ).animate(CurvedAnimation(parent: animation, curve: Curves.easeOutCubic)),
       child: FadeTransition(
         opacity: animation,
         child: TweenAnimationBuilder(
@@ -58,9 +55,10 @@ class AnimatedStoryItem extends StatelessWidget {
           var end = Offset.zero;
           var curve = Curves.ease;
 
-          var tween = Tween(begin: begin, end: end).chain(
-            CurveTween(curve: curve),
-          );
+          var tween = Tween(
+            begin: begin,
+            end: end,
+          ).chain(CurveTween(curve: curve));
 
           return SlideTransition(
             position: animation.drive(tween),
